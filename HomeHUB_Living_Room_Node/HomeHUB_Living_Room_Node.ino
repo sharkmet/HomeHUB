@@ -13,9 +13,10 @@
 // ============================================
 // CONFIGURATION - UPDATE THIS!
 // ============================================
-#define WIFI_SSID "Netgear 2006"    // Change to your WiFi name
-#define WIFI_PASSWORD "woaiPDMS59"  // Change to your WiFi password
-#define RASPBERRY_PI_IP "10.0.0.47" // Change to your Raspberry Pi IP address
+#define WIFI_SSID "YOUR_WIFI_SSID"         // Change to your WiFi name
+#define WIFI_PASSWORD "YOUR_WIFI_PASSWORD" // Change to your WiFi password
+#define RASPBERRY_PI_IP                                                        \
+  "YOUR_SERVER_IP" // Change to your Raspberry Pi IP address
 #define RASPBERRY_PI_PORT 5000
 #define DEVICE_NAME "HomeHUB_Env_Node_2" // Living Room node
 

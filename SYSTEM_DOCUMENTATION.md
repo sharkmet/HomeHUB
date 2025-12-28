@@ -156,9 +156,9 @@ sequenceDiagram
 #### Configuration Constants
 
 ```cpp
-#define WIFI_SSID "Netgear 2006"        // Your WiFi network
-#define WIFI_PASSWORD "woaiPDMS59"      // WiFi password
-#define SERVER_IP "10.0.0.12"           // Server IP address
+#define WIFI_SSID "YOUR_WIFI_SSID"        // Your WiFi network
+#define WIFI_PASSWORD "YOUR_WIFI_PASSWORD"      // WiFi password
+#define SERVER_IP "YOUR_SERVER_IP"           // Server IP address
 #define SERVER_PORT 5000                // Flask server port
 #define DEVICE_NAME "HomeHUB_Env_Node"  // Unique device identifier
 
