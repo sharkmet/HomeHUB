@@ -1,5 +1,5 @@
 /**
- * HomePOD ESP32-D Sensor Firmware
+ * HomeHUB ESP32-D Sensor Firmware
  *
  * Sensors:
  *   - Microphone: GPIO35 (ADC input)
@@ -37,7 +37,7 @@ struct SensorData {
 } sensorData;
 
 void printSensorData() {
-    Serial.println("=== HomePOD Sensor Readings ===");
+    Serial.println("=== HomeHUB Sensor Readings ===");
 
     Serial.printf("Temperature: %.1f°C\n", sensorData.temperature);
     Serial.printf("Humidity: %.1f%%\n", sensorData.humidity);
@@ -55,7 +55,7 @@ void setup() {
 
     Serial.println();
     Serial.println("================================");
-    Serial.println("   HomePOD Sensor Firmware");
+    Serial.println("   HomeHUB Sensor Firmware");
     Serial.println("   ESP32-D Initialization");
     Serial.println("================================");
     Serial.println();

@@ -1,7 +1,7 @@
 /**
  * ============================================
- * HomePOD ESP32 Living Room Node (DHT22 + Mic)
- * Records data and sends JSON to Raspberry Pi
+ * HomeHUB ESP32 Env Node (DHT22 + Mic)
+ * LAPTOP VERSION - Sends data to Windows PC
  * ============================================
  */
 #include <Arduino.h>
@@ -11,13 +11,13 @@
 #include <WiFi.h>
 
 // ============================================
-// CONFIGURATION - UPDATE THIS!
+// CONFIGURATION - LAPTOP VERSION
 // ============================================
-#define WIFI_SSID "Netgear 2006"    // Change to your WiFi name
-#define WIFI_PASSWORD "woaiPDMS59"  // Change to your WiFi password
-#define RASPBERRY_PI_IP "10.0.0.47" // Change to your Raspberry Pi IP address
-#define RASPBERRY_PI_PORT 5000
-#define DEVICE_NAME "HomePOD_Env_Node_2" // Living Room node
+#define WIFI_SSID "Netgear 2006"
+#define WIFI_PASSWORD "woaiPDMS59"
+#define SERVER_IP "10.0.0.12" // Your laptop's IP
+#define SERVER_PORT 5000
+#define DEVICE_NAME "HomeHUB_Env_Node"
 
 // PINS & SETTINGS
 #define MIC_PIN 35
@@ -25,7 +25,7 @@
 #define DHT_TYPE DHT22
 
 #define AUDIO_SAMPLES 64
-#define AUDIO_NOISE_FLOOR 10
+#define AUDIO_NOISE_FLOOR 100
 #define WIFI_SEND_INTERVAL 10000 // Send data every 10 seconds
 
 // ============================================
@@ -101,10 +101,10 @@ public:
 
     int peakToPeak = maxVal - minVal;
 
-    if (peakToPeak < AUDIO_NOISE_FLOOR)
+    if (peakToPeak < 10)
       peakToPeak = 0;
     else
-      peakToPeak -= AUDIO_NOISE_FLOOR;
+      peakToPeak -= 10;
 
     if (peakToPeak > _peakLevel)
       _peakLevel = peakToPeak;
@@ -133,6 +133,8 @@ void connectWiFi() {
     Serial.print(".");
   }
   Serial.println("\nWiFi Connected!");
+  Serial.print("ESP32 IP: ");
+  Serial.println(WiFi.localIP());
 }
 
 void sendData(float temp, float hum, int audioPeak) {
@@ -142,7 +144,8 @@ void sendData(float temp, float hum, int audioPeak) {
   }
 
   HTTPClient http;
-  String url = "http://" + String(RASPBERRY_PI_IP) + ":5000/sensor-data";
+  String url = "http://" + String(SERVER_IP) + ":" + String(SERVER_PORT) +
+               "/sensor-data";
 
   http.begin(url);
   http.addHeader("Content-Type", "application/json");
@@ -157,6 +160,9 @@ void sendData(float temp, float hum, int audioPeak) {
 
   String jsonString;
   serializeJson(doc, jsonString);
+
+  Serial.print("Sending to: ");
+  Serial.println(url);
 
   int responseCode = http.POST(jsonString);
   if (responseCode > 0)
@@ -173,10 +179,22 @@ void sendData(float temp, float hum, int audioPeak) {
 // ============================================
 void setup() {
   Serial.begin(115200);
+  delay(1000);
+
+  Serial.println("\n============================================");
+  Serial.println("  HomeHUB Env Node - LAPTOP VERSION");
+  Serial.println("============================================");
+  Serial.print("Target Server: ");
+  Serial.print(SERVER_IP);
+  Serial.print(":");
+  Serial.println(SERVER_PORT);
+
   dhtSensor.begin();
   micSensor.begin();
   connectWiFi();
-  Serial.println("Living Room Node Initialized");
+
+  Serial.println("\nEnv Node Ready!");
+  Serial.println("============================================\n");
 }
 
 void loop() {

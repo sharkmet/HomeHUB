@@ -1,6 +1,6 @@
 /**
  * ============================================
- * HomePOD ESP32 Sensor Firmware with WiFi
+ * HomeHUB ESP32 Sensor Firmware with WiFi
  * Arduino IDE Version - Sends Data to Raspberry Pi
  * ============================================
  *
@@ -71,7 +71,7 @@
 #define WIFI_PASSWORD "YOUR_WIFI_PASSWORD"   // Change to your WiFi password
 #define RASPBERRY_PI_IP "192.168.1.100"      // Change to your Raspberry Pi IP address
 #define RASPBERRY_PI_PORT 5000               // Port where Python server runs
-#define DEVICE_NAME "HomePOD-Living-Room"    // Unique name for this device
+#define DEVICE_NAME "HomeHUB-Living-Room"    // Unique name for this device
 
 // ============================================
 // PIN DEFINITIONS
@@ -543,7 +543,7 @@ void sendDataToRaspberryPi() {
 // HELPER FUNCTIONS
 // ============================================
 void printSensorData() {
-    Serial.println("=== HomePOD Sensor Readings ===");
+    Serial.println("=== HomeHUB Sensor Readings ===");
     Serial.printf("Temperature: %.1f°C\n", sensorData.temperature);
     Serial.printf("Humidity: %.1f%%\n", sensorData.humidity);
     Serial.printf("Light Level: %.1f lux\n", sensorData.lightLevel);
@@ -565,7 +565,7 @@ void setup() {
 
     Serial.println();
     Serial.println("================================");
-    Serial.println("   HomePOD Sensor Firmware");
+    Serial.println("   HomeHUB Sensor Firmware");
     Serial.println("   ESP32-D with WiFi");
     Serial.println("================================");
     Serial.println();

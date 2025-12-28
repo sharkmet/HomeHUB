@@ -1,4 +1,4 @@
-# HomePOD WiFi Setup Guide
+# HomeHUB WiFi Setup Guide
 
 Complete guide to send ESP32 sensor data to Raspberry Pi over WiFi.
 
@@ -28,14 +28,14 @@ You need **one more library** for WiFi functionality:
 
 ### Step 2: Update WiFi Credentials
 
-Open `HomePOD_WiFi_Sensor_Firmware.ino` and change these lines (around line 62-66):
+Open `HomeHUB_WiFi_Sensor_Firmware.ino` and change these lines (around line 62-66):
 
 ```cpp
 // CHANGE THESE VALUES!
 #define WIFI_SSID "YOUR_WIFI_SSID"           // Your WiFi network name
 #define WIFI_PASSWORD "YOUR_WIFI_PASSWORD"   // Your WiFi password
 #define RASPBERRY_PI_IP "192.168.1.100"      // Your Pi's IP address (see Part 2)
-#define DEVICE_NAME "HomePOD-Living-Room"    // Give your device a unique name
+#define DEVICE_NAME "HomeHUB-Living-Room"    // Give your device a unique name
 ```
 
 **Example:**
@@ -43,7 +43,7 @@ Open `HomePOD_WiFi_Sensor_Firmware.ino` and change these lines (around line 62-6
 #define WIFI_SSID "MyHomeNetwork"
 #define WIFI_PASSWORD "MySecretPassword123"
 #define RASPBERRY_PI_IP "192.168.1.50"
-#define DEVICE_NAME "HomePOD-Bedroom"
+#define DEVICE_NAME "HomeHUB-Bedroom"
 ```
 
 ### Step 3: Upload to ESP32
@@ -104,7 +104,7 @@ python3 raspberry_pi_server.py
 You should see:
 ```
 ============================================================
-   HomePOD Sensor Data Receiver
+   HomeHUB Sensor Data Receiver
    Raspberry Pi Server Starting...
 ============================================================
 
@@ -165,14 +165,14 @@ To make the server start automatically when Raspberry Pi boots:
 ### Create systemd service:
 
 ```bash
-sudo nano /etc/systemd/system/homepod-server.service
+sudo nano /etc/systemd/system/HomeHUB-server.service
 ```
 
 Paste this content:
 
 ```ini
 [Unit]
-Description=HomePOD Sensor Data Server
+Description=HomeHUB Sensor Data Server
 After=network.target
 
 [Service]
@@ -190,18 +190,18 @@ WantedBy=multi-user.target
 Enable and start the service:
 
 ```bash
-sudo systemctl enable homepod-server.service
-sudo systemctl start homepod-server.service
+sudo systemctl enable HomeHUB-server.service
+sudo systemctl start HomeHUB-server.service
 ```
 
 Check status:
 ```bash
-sudo systemctl status homepod-server.service
+sudo systemctl status HomeHUB-server.service
 ```
 
 View logs:
 ```bash
-sudo journalctl -u homepod-server.service -f
+sudo journalctl -u HomeHUB-server.service -f
 ```
 
 ---
@@ -212,7 +212,7 @@ The ESP32 sends data in this JSON format:
 
 ```json
 {
-  "device_name": "HomePOD-Living-Room",
+  "device_name": "HomeHUB-Living-Room",
   "timestamp": 45230,
   "sensors": {
     "temperature": 23.5,
@@ -283,7 +283,7 @@ Now that you have data flowing, you can:
 
 ## 📝 Files Summary
 
-- `HomePOD_WiFi_Sensor_Firmware.ino` - ESP32 firmware with WiFi
+- `HomeHUB_WiFi_Sensor_Firmware.ino` - ESP32 firmware with WiFi
 - `raspberry_pi_server.py` - Python server for Raspberry Pi
 - `sensor_data.log` - Timestamped log of all sensor readings
 - `latest_sensor_data.json` - Most recent reading from each device

@@ -1,6 +1,6 @@
 /**
  * ============================================
- * HomePOD ESP32 Env Node (DHT22 + Mic)
+ * HomeHUB ESP32 Living Room Node (DHT22 + Mic)
  * Records data and sends JSON to Raspberry Pi
  * ============================================
  */
@@ -17,7 +17,7 @@
 #define WIFI_PASSWORD "woaiPDMS59"  // Change to your WiFi password
 #define RASPBERRY_PI_IP "10.0.0.47" // Change to your Raspberry Pi IP address
 #define RASPBERRY_PI_PORT 5000
-#define DEVICE_NAME "HomePOD_Env_Node"
+#define DEVICE_NAME "HomeHUB_Env_Node_2" // Living Room node
 
 // PINS & SETTINGS
 #define MIC_PIN 35
@@ -25,7 +25,7 @@
 #define DHT_TYPE DHT22
 
 #define AUDIO_SAMPLES 64
-#define AUDIO_NOISE_FLOOR 100
+#define AUDIO_NOISE_FLOOR 10
 #define WIFI_SEND_INTERVAL 10000 // Send data every 10 seconds
 
 // ============================================
@@ -91,7 +91,6 @@ public:
     int minVal = 4095;
     int maxVal = 0;
 
-    // Fast sampling loop
     for (int i = 0; i < AUDIO_SAMPLES; i++) {
       int val = analogRead(MIC_PIN);
       if (val < minVal)
@@ -102,15 +101,10 @@ public:
 
     int peakToPeak = maxVal - minVal;
 
-    // DEBUG: Print raw values to help tune potentiometer
-    // Serial.printf("Raw Mic: Min=%d, Max=%d, P2P=%d\n", minVal, maxVal,
-    // peakToPeak);
-
-    // Noise floor correction (Lowered to 10 for debugging, originally 100)
-    if (peakToPeak < 10)
+    if (peakToPeak < AUDIO_NOISE_FLOOR)
       peakToPeak = 0;
     else
-      peakToPeak -= 10;
+      peakToPeak -= AUDIO_NOISE_FLOOR;
 
     if (peakToPeak > _peakLevel)
       _peakLevel = peakToPeak;
@@ -148,19 +142,17 @@ void sendData(float temp, float hum, int audioPeak) {
   }
 
   HTTPClient http;
-  // URL for the Python Flask Server
   String url = "http://" + String(RASPBERRY_PI_IP) + ":5000/sensor-data";
 
   http.begin(url);
   http.addHeader("Content-Type", "application/json");
 
-  // Match JSON structure to Python script
   StaticJsonDocument<256> doc;
-  doc["device_name"] = DEVICE_NAME; // Changed from 'device'
+  doc["device_name"] = DEVICE_NAME;
 
   JsonObject s = doc.createNestedObject("sensors");
-  s["temperature"] = temp; // Changed from 'temp'
-  s["humidity"] = hum;     // Changed from 'hum'
+  s["temperature"] = temp;
+  s["humidity"] = hum;
   s["audio_peak"] = audioPeak;
 
   String jsonString;
@@ -184,7 +176,7 @@ void setup() {
   dhtSensor.begin();
   micSensor.begin();
   connectWiFi();
-  Serial.println("Env Node Initialized");
+  Serial.println("Living Room Node Initialized");
 }
 
 void loop() {

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-HomePOD Sensor Data Receiver
+HomeHUB Sensor Data Receiver
 Simple Flask server for Raspberry Pi to receive sensor data from ESP32
 
 Installation on Raspberry Pi:
@@ -34,7 +34,7 @@ def home():
     html = """
     <html>
     <head>
-        <title>HomePOD Sensor Server</title>
+        <title>HomeHUB Sensor Server</title>
         <style>
             body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
             .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; }
@@ -49,7 +49,7 @@ def home():
     </head>
     <body>
         <div class="container">
-            <h1>🏠 HomePOD Sensor Server</h1>
+            <h1>🏠 HomeHUB Sensor Server</h1>
             <p class="status">✓ Server Running</p>
             <p>Listening for sensor data on port 5000</p>
             <hr>
@@ -170,7 +170,7 @@ def get_device_latest(device_name):
 
 if __name__ == '__main__':
     print("\n" + "="*60)
-    print("   HomePOD Sensor Data Receiver")
+    print("   HomeHUB Sensor Data Receiver")
     print("   Raspberry Pi Server Starting...")
     print("="*60)
     print("\nServer Configuration:")

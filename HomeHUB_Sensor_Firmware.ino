@@ -394,7 +394,7 @@
  // HELPER FUNCTIONS
  // ============================================
  void printSensorData() {
-     Serial.println("=== HomePOD Sensor Readings ===");
+     Serial.println("=== HomeHUB Sensor Readings ===");
      Serial.printf("Temperature: %.1f°C\n", sensorData.temperature);
      Serial.printf("Humidity: %.1f%%\n", sensorData.humidity);
      Serial.printf("Light Level: %.1f lux\n", sensorData.lightLevel);
@@ -413,7 +413,7 @@
  
      Serial.println();
      Serial.println("================================");
-     Serial.println("   HomePOD Sensor Firmware");
+     Serial.println("   HomeHUB Sensor Firmware");
      Serial.println("   ESP32-D Initialization");
      Serial.println("================================");
      Serial.println();

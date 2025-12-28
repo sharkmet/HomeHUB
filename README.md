@@ -1,4 +1,4 @@
-# HomePOD - ESP32 Environmental Monitoring System
+# HomeHUB - ESP32 Environmental Monitoring System
 
 A comprehensive IoT sensor platform built on ESP32 for monitoring temperature, humidity, light levels, and ambient sound in your home or office. The system features ESP32 sensor nodes that transmit data to a central Raspberry Pi server with a 7-inch touchscreen display.
 
@@ -66,7 +66,7 @@ Install these libraries via Arduino IDE Library Manager:
 ## Available Firmware Options
 
 ### 1. Basic Sensor Firmware
-**File**: `HomePOD_Sensor_Firmware.ino`
+**File**: `HomeHUB_Sensor_Firmware.ino`
 
 Standalone firmware that reads all sensors and outputs data to Serial Monitor. Perfect for testing and development.
 
@@ -76,7 +76,7 @@ Standalone firmware that reads all sensors and outputs data to Serial Monitor. P
 - No WiFi required
 
 ### 2. WiFi-Enabled Firmware
-**File**: `HomePOD_WiFi_Sensor_Firmware.ino`
+**File**: `HomeHUB_WiFi_Sensor_Firmware.ino`
 
 Full-featured firmware with WiFi connectivity to send data to a Raspberry Pi server.
 
@@ -91,7 +91,7 @@ Full-featured firmware with WiFi connectivity to send data to a Raspberry Pi ser
 **Setup Guide**: See [WIFI_SETUP_GUIDE.md](WIFI_SETUP_GUIDE.md)
 
 ### 3. Environmental Node
-**File**: `HomePOD_Env_Node/HomePOD_Env_Node.ino`
+**File**: `HomeHUB_Env_Node/HomeHUB_Env_Node.ino`
 
 Specialized firmware focusing on temperature and humidity monitoring.
 
@@ -101,7 +101,7 @@ Specialized firmware focusing on temperature and humidity monitoring.
 - Lower power consumption
 
 ### 4. Light Monitoring Node
-**File**: `HomePOD_Light_Node/HomePOD_Light_Node.ino`
+**File**: `HomeHUB_Light_Node/HomeHUB_Light_Node.ino`
 
 Dedicated light level monitoring with advanced features.
 
@@ -137,7 +137,7 @@ Dedicated light level monitoring with advanced features.
 5. Open **Serial Monitor** at 115200 baud
 
 ### 4. For WiFi Version (Optional)
-1. Edit `HomePOD_WiFi_Sensor_Firmware.ino`:
+1. Edit `HomeHUB_WiFi_Sensor_Firmware.ino`:
    - Update WiFi SSID and password
    - Set Raspberry Pi IP address
 2. Set up Raspberry Pi server (see [WIFI_SETUP_GUIDE.md](WIFI_SETUP_GUIDE.md))
@@ -148,7 +148,7 @@ Dedicated light level monitoring with advanced features.
 ### Serial Monitor Output (Basic Firmware)
 ```
 ================================
-   HomePOD Sensor Firmware
+   HomeHUB Sensor Firmware
    ESP32-D Initialization
 ================================
 
@@ -161,7 +161,7 @@ Initializing sensors...
 Sensor initialization complete!
 Starting sensor readings...
 
-=== HomePOD Sensor Readings ===
+=== HomeHUB Sensor Readings ===
 Temperature: 23.5°C
 Humidity: 45.2%
 Light Level: 234.5 lux
@@ -209,24 +209,29 @@ To run the dashboard in full-screen kiosk mode on boot:
 
 3. Set up server to start on boot:
    ```bash
-   sudo nano /etc/systemd/system/homepod.service
+   sudo nano /etc/systemd/system/HomeHUB.service
    ```
    Add:
    ```ini
    [Unit]
-   Description=HomePOD Dashboard Server
+   Description=HomeHUB Dashboard Server
    After=network.target
 
    [Service]
+<<<<<<< HEAD
    ExecStart=/usr/bin/python3 /home/pi/HomePOD/homepod_server_v3.py
    WorkingDirectory=/home/pi/HomePOD
+=======
+   ExecStart=/usr/bin/python3 /home/pi/HomeHUB/HomeHUB_server_v2.py
+   WorkingDirectory=/home/pi/HomeHUB
+>>>>>>> 56e310d (renamed to homeHUB)
    User=pi
    Restart=always
 
    [Install]
    WantedBy=multi-user.target
    ```
-   Enable: `sudo systemctl enable homepod.service`
+   Enable: `sudo systemctl enable HomeHUB.service`
 
 4. Reboot: `sudo reboot`
 
@@ -240,7 +245,7 @@ To run the dashboard in full-screen kiosk mode on boot:
 ### Example JSON Response
 ```json
 {
-  "device_name": "HomePOD-Living-Room",
+  "device_name": "HomeHUB-Living-Room",
   "timestamp": 45230,
   "sensors": {
     "temperature": 23.5,
@@ -305,6 +310,7 @@ Edit in the firmware to customize:
 ## Project Structure
 
 ```
+<<<<<<< HEAD
 HomePOD/
 ├── HomePOD_Sensor_Firmware.ino          # Basic all-sensor firmware
 ├── HomePOD_WiFi_Sensor_Firmware.ino     # WiFi-enabled firmware
@@ -315,6 +321,16 @@ HomePOD/
 ├── raspberry_pi_server.py               # Basic Python server
 ├── homepod_server_v2.py                 # Enhanced server with weather & to-do
 ├── homepod_server_v3.py                 # Full-featured server with multiple apps
+=======
+HomeHUB/
+├── HomeHUB_Sensor_Firmware.ino          # Basic all-sensor firmware
+├── HomeHUB_WiFi_Sensor_Firmware.ino     # WiFi-enabled firmware
+├── HomeHUB_Env_Node/                    # Environmental monitoring node
+│   └── HomeHUB_Env_Node.ino
+├── HomeHUB_Light_Node/                  # Light monitoring node
+│   └── HomeHUB_Light_Node.ino
+├── raspberry_pi_server.py               # Python server for Raspberry Pi
+>>>>>>> 56e310d (renamed to homeHUB)
 ├── WIFI_SETUP_GUIDE.md                  # WiFi setup instructions
 ├── src/                                 # PlatformIO source files
 ├── include/                             # PlatformIO headers
@@ -359,8 +375,8 @@ This project is open source and available for personal and educational use.
 
 ## Credits
 
-**Authors**: Ryan Li, Gary Sun, Ryan Wang, Ryan Giang
-**Repository**: [https://github.com/sharkmet/HomePOD](https://github.com/sharkmet/HomePOD)
+**Author**: Gary S (Libola)
+**Repository**: [https://github.com/sharkmet/HomeHUB](https://github.com/sharkmet/HomeHUB)
 
 ## Support
 

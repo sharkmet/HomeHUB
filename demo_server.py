@@ -1,66 +1,74 @@
 #!/usr/bin/env python3
 """
-HomePOD Sensor Server v2 - Touch-Friendly Dashboard
-- Groups multiple nodes into logical rooms
-- Interprets raw sensor values into human-readable levels
-- Touch-friendly UI with weather integration
-- Optimized for 7-inch HDMI display
+HomeHUB Demo Server - For Portfolio Recording
+Pre-populated with realistic sensor data for Living Room and Bedroom
 """
 
 from flask import Flask, request, jsonify
 from datetime import datetime
 import json
-import requests
 import time
-import os
-import uuid
+import requests
 
 app = Flask(__name__)
 
-DATA_LOG_FILE = "sensor_data_v2.log"
-TODO_FILE = "todo_data.json"
-latest_readings = {}
+# Pre-populate with realistic demo data
+latest_readings = {
+    "HomeHUB_Env_Node": {
+        "device_name": "HomeHUB_Env_Node",
+        "sensors": {
+            "temperature": 21.8,
+            "humidity": 42.5,
+            "audio_peak": 35
+        },
+        "received_at": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    },
+    "HomeHUB_Light_Node": {
+        "device_name": "HomeHUB_Light_Node",
+        "sensors": {
+            "light": 180
+        },
+        "received_at": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    },
+    "HomeHUB_Env_Node_2": {
+        "device_name": "HomeHUB_Env_Node_2",
+        "sensors": {
+            "temperature": 23.2,
+            "humidity": 38.7,
+            "audio_peak": 245
+        },
+        "received_at": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    }
+}
 
-# ============================================
-# TO-DO LIST STORAGE
-# ============================================
-def load_todos():
-    if os.path.exists(TODO_FILE):
-        try:
-            with open(TODO_FILE, 'r') as f:
-                return json.load(f)
-        except:
-            return []
-    return []
-
-def save_todos(todos):
-    with open(TODO_FILE, 'w') as f:
-        json.dump(todos, f)
-
-todo_list = load_todos()
+# Demo to-do list
+todo_list = [
+    {"id": "1", "text": "Water the plants", "done": True},
+    {"id": "2", "text": "Check thermostat settings", "done": False},
+    {"id": "3", "text": "Replace living room sensor battery", "done": False},
+]
 
 # ============================================
 # WEATHER CONFIGURATION
 # ============================================
-WEATHER_API_KEY = "key"
+WEATHER_API_KEY = "f8750f0d79a614efa7c0bb4a4272c311"
 WEATHER_CITY = "Calgary"
 WEATHER_COUNTRY = "CA"
-WEATHER_UNITS = "metric"  # Use "imperial" for Fahrenheit
+WEATHER_UNITS = "metric"
 
-# Weather cache (refresh every 10 minutes)
 weather_cache = {
     'data': None,
     'forecast': None,
     'last_update': 0
 }
-WEATHER_CACHE_DURATION = 600  # 10 minutes
+WEATHER_CACHE_DURATION = 600
 
 # ============================================
 # ROOM CONFIGURATION
 # ============================================
 ROOM_CONFIG = {
-    "Bedroom": ["HomePOD_Env_Node", "HomePOD_Light_Node"],
-    "Living Room": ["HomePOD_Env_Node_2"],
+    "Bedroom": ["HomeHUB_Env_Node", "HomeHUB_Light_Node"],
+    "Living Room": ["HomeHUB_Env_Node_2"],
 }
 
 # ============================================
@@ -136,12 +144,10 @@ def fetch_weather():
         return weather_cache['data'], weather_cache['forecast']
     
     try:
-        # Current weather
         current_url = f"https://api.openweathermap.org/data/2.5/weather?q={WEATHER_CITY},{WEATHER_COUNTRY}&appid={WEATHER_API_KEY}&units={WEATHER_UNITS}"
         current_resp = requests.get(current_url, timeout=10)
         current_data = current_resp.json()
         
-        # 5-day forecast
         forecast_url = f"https://api.openweathermap.org/data/2.5/forecast?q={WEATHER_CITY},{WEATHER_COUNTRY}&appid={WEATHER_API_KEY}&units={WEATHER_UNITS}"
         forecast_resp = requests.get(forecast_url, timeout=10)
         forecast_data = forecast_resp.json()
@@ -449,15 +455,12 @@ def home():
     <!DOCTYPE html>
     <html>
     <head>
-        <title>HomePOD Dashboard</title>
+        <title>HomeHUB Dashboard</title>
         {get_base_styles()}
-        <script>
-            setTimeout(() => location.reload(), 10000);
-        </script>
     </head>
     <body>
         <div class="header">
-            <div class="page-title">🏠 HomePOD</div>
+            <div class="page-title">🏠 HomeHUB</div>
             <div class="time-display">
                 <div class="time">{time_str}</div>
                 <div>{date_str}</div>
@@ -533,10 +536,6 @@ def home():
             </a>
         """
     
-    # If no rooms yet
-    if not rooms:
-        html += '<div class="no-data"><span class="status-dot"></span>Waiting for sensor data...</div>'
-    
     html += """
         </div>
     </body>
@@ -591,7 +590,7 @@ def weather_detail():
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Weather - HomePOD</title>
+        <title>Weather - HomeHUB</title>
         {get_base_styles()}
     </head>
     <body>
@@ -707,11 +706,8 @@ def room_detail(room_name):
     <!DOCTYPE html>
     <html>
     <head>
-        <title>{room_name} - HomePOD</title>
+        <title>{room_name} - HomeHUB</title>
         {get_base_styles()}
-        <script>
-            setTimeout(() => location.reload(), 10000);
-        </script>
     </head>
     <body>
         <div class="header">
@@ -730,55 +726,6 @@ def room_detail(room_name):
     """
     return html
 
-# ============================================
-# API ROUTES
-# ============================================
-@app.route('/sensor-data', methods=['POST'])
-def receive_sensor_data():
-    try:
-        data = request.get_json()
-        if not data:
-            return jsonify({'status': 'error', 'message': 'No data received'}), 400
-
-        data['received_at'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        device_name = data.get('device_name', 'Unknown Device')
-        latest_readings[device_name] = data
-
-        with open(DATA_LOG_FILE, 'a') as f:
-            f.write(json.dumps(data) + '\n')
-
-        sensors = data.get('sensors', {})
-        print(f"\n[{data['received_at']}] {device_name}")
-        if 'temperature' in sensors:
-            print(f"  Temp: {sensors['temperature']}°C")
-        if 'humidity' in sensors:
-            print(f"  Humidity: {sensors['humidity']}%")
-        if 'audio_peak' in sensors:
-            print(f"  Audio: {interpret_audio(sensors['audio_peak'])}")
-        if 'light' in sensors:
-            print(f"  Light: {interpret_light(sensors['light'])}")
-
-        return jsonify({'status': 'success'}), 200
-
-    except Exception as e:
-        print(f"Error: {e}")
-        return jsonify({'status': 'error', 'message': str(e)}), 500
-
-@app.route('/latest', methods=['GET'])
-def get_latest_data():
-    return jsonify(get_room_data()), 200
-
-@app.route('/api/weather', methods=['GET'])
-def get_weather_api():
-    weather_data, forecast_data = fetch_weather()
-    return jsonify({
-        'current': weather_data,
-        'forecast': forecast_data
-    }), 200
-
-# ============================================
-# TO-DO LIST ROUTES
-# ============================================
 @app.route('/todo')
 def todo_page():
     global todo_list
@@ -807,7 +754,7 @@ def todo_page():
     <!DOCTYPE html>
     <html>
     <head>
-        <title>To-Do - HomePOD</title>
+        <title>To-Do - HomeHUB</title>
         {get_base_styles()}
         <style>
             .todo-input-container {{
@@ -896,13 +843,13 @@ def todo_page():
     <body>
         <div class="header">
             <a href="/" class="back-btn">←</a>
-            <div class="page-title">📝 To-Do List</div>
+            <div class="page-title">To-Do List</div>
             <div style="width: 60px;"></div>
         </div>
         
         <div class="detail-card">
             <form method="POST" action="/todo/add" class="todo-input-container">
-                <input type="text" name="text" class="todo-input" placeholder="Add a new task..." autocomplete="off" required>
+                <input type="text" name="task" class="todo-input" placeholder="Add a new task..." required>
                 <button type="submit" class="todo-add-btn">Add</button>
             </form>
             
@@ -913,46 +860,17 @@ def todo_page():
     """
     return html
 
-@app.route('/todo/add', methods=['POST'])
-def todo_add():
-    global todo_list
-    text = request.form.get('text', '').strip()
-    if text:
-        todo_list.append({
-            'id': str(uuid.uuid4())[:8],
-            'text': text,
-            'done': False
-        })
-        save_todos(todo_list)
-    return '<script>window.location.href="/todo";</script>'
-
-@app.route('/todo/toggle/<item_id>', methods=['POST'])
-def todo_toggle(item_id):
-    global todo_list
-    for item in todo_list:
-        if item['id'] == item_id:
-            item['done'] = not item['done']
-            break
-    save_todos(todo_list)
-    return '<script>window.location.href="/todo";</script>'
-
-@app.route('/todo/delete/<item_id>', methods=['POST'])
-def todo_delete(item_id):
-    global todo_list
-    todo_list = [item for item in todo_list if item['id'] != item_id]
-    save_todos(todo_list)
-    return '<script>window.location.href="/todo";</script>'
-
-
 if __name__ == '__main__':
     print("\n" + "="*50)
-    print("  HomePOD Server v2 - Touch-Friendly Dashboard")
-    print("  Weather: Calgary, AB")
+    print("  HomeHUB DEMO Server - Portfolio Recording")
+    print("  Pre-loaded with realistic sensor data")
     print("="*50)
     print("\nRoom Configuration:")
     for room, devices in ROOM_CONFIG.items():
         print(f"  {room}: {', '.join(devices)}")
-    print("\nAccess dashboard at: http://<your-pi-ip>:5000")
+    print("\nDemo Data:")
+    print("  Bedroom: 21.8°C, 42.5% humidity, Quiet, Bright")
+    print("  Living Room: 23.2°C, 38.7% humidity, Talking")
+    print("\nAccess dashboard at: http://localhost:5000")
     print("Press Ctrl+C to stop\n")
     app.run(host='0.0.0.0', port=5000, debug=False)
- 

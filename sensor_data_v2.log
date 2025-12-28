@@ -1,0 +1,13 @@
+{"device_name": "HomePOD_Env_Node", "sensors": {"temperature": 21.9, "humidity": 45, "audio_peak": 0}, "received_at": "2025-12-25 00:42:22"}
+{"device_name": "HomePOD_Env_Node", "sensors": {"temperature": 21.9, "humidity": 44.8, "audio_peak": 0}, "received_at": "2025-12-25 00:42:31"}
+{"device_name": "HomePOD_Env_Node", "sensors": {"temperature": 22, "humidity": 44.8, "audio_peak": 0}, "received_at": "2025-12-25 00:42:41"}
+{"device_name": "HomePOD_Env_Node", "sensors": {"temperature": 22, "humidity": 45.1, "audio_peak": 0}, "received_at": "2025-12-25 00:42:51"}
+{"device_name": "HomePOD_Env_Node", "sensors": {"temperature": 22, "humidity": 44.8, "audio_peak": 0}, "received_at": "2025-12-25 00:43:01"}
+{"device_name": "HomePOD_Env_Node", "sensors": {"temperature": 22, "humidity": 44.7, "audio_peak": 0}, "received_at": "2025-12-25 00:43:11"}
+{"device_name": "HomePOD_Env_Node", "sensors": {"temperature": 22.1, "humidity": 45.2, "audio_peak": 3446}, "received_at": "2025-12-25 00:43:21"}
+{"device_name": "HomePOD_Env_Node", "sensors": {"temperature": 22.1, "humidity": 44.7, "audio_peak": 27}, "received_at": "2025-12-25 00:43:31"}
+{"device_name": "HomePOD_Env_Node", "sensors": {"temperature": 22.2, "humidity": 44.6, "audio_peak": 0}, "received_at": "2025-12-25 00:43:41"}
+{"device_name": "HomePOD_Light_Node", "sensors": {"light": 48.33333}, "received_at": "2025-12-25 00:47:09"}
+{"device_name": "HomePOD_Light_Node", "sensors": {"light": 53.33333}, "received_at": "2025-12-25 00:47:16"}
+{"device_name": "HomePOD_Light_Node", "sensors": {"light": 13.33333}, "received_at": "2025-12-25 00:47:27"}
+{"device_name": "HomePOD_Light_Node", "sensors": {"light": 2.5}, "received_at": "2025-12-25 00:47:36"}
